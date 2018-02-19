@@ -85,18 +85,15 @@ export class AddPlacePage {
       correctOrientation: true
     })
     .then(imageData => {
-      this.displayToast(imageData);
       const currentName = imageData.replace(/^.*[\\\/]/, '');
       const currentPath = imageData.replace(/[^\/]*$/, '');
-      const filename = (new Date()).getUTCMilliseconds + '.jpg';
+      const filename = (new Date()).getTime() + '.jpg';
       this.file.moveFile(currentPath, currentName, this.file.dataDirectory, filename)
         .then((data: Entry) => {
           this.imageUrl = data.nativeURL;
           this.camera.cleanup();
-          this.displayToast(this.imageUrl);
         })
         .catch((error: FileError) => {
-          console.log(error);
           this.imageUrl = '';
           this.displayToast('Error copying file');
           this.camera.cleanup();
@@ -110,7 +107,7 @@ export class AddPlacePage {
 
   private displayToast(message: string){
     this.toastCtrl.create({
-      message: 'Error taking picture',
+      message: message,
       duration: 5000
     }).present();
   }
